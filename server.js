@@ -11,36 +11,78 @@ const client = new Client({
 
 client.connect();
 
-const questions = [
-  {
-    type: 'input',
-    name: 'departmentName',
-    message: 'Enter department name:',
-  },
-  {
-    type: 'input',
-    name: 'roleTitle',
-    message: 'Enter role title:',
-  },
-];
+// Prompt for adding a department
+function addDepartmentPrompt() {
+  return inquirer.prompt([
+      {
+          type: 'input',
+          name: 'departmentName',
+          message: 'Enter the name of the department:'
+      }
+  ]);
+}
 
-inquirer.prompt(questions)
-  .then(answers => {
-    const { departmentName, roleTitle } = answers;
+// Prompt for adding a role
+function addRolePrompt() {
+  return inquirer.prompt([
+      {
+          type: 'input',
+          name: 'roleName',
+          message: 'Enter the name of the role:'
+      },
+      {
+          type: 'input',
+          name: 'salary',
+          message: 'Enter the salary for this role:'
+      },
+      {
+          type: 'input',
+          name: 'departmentId',
+          message: 'Enter the department ID for this role:'
+      }
+  ]);
+}
 
-    // Insert data into departments table
-    client.query(`INSERT INTO departments (name) VALUES ($1)`, [departmentName]);
+// Prompt for adding an employee
+function addEmployeePrompt() {
+  return inquirer.prompt([
+      {
+          type: 'input',
+          name: 'firstName',
+          message: 'Enter the first name of the employee:'
+      },
+      {
+          type: 'input',
+          name: 'lastName',
+          message: 'Enter the last name of the employee:'
+      },
+      {
+          type: 'input',
+          name: 'roleId',
+          message: 'Enter the role ID for this employee:'
+      },
+      {
+          type: 'input',
+          name: 'managerId',
+          message: 'Enter the manager ID for this employee:'
+      }
+  ]);
+}
 
-    // Insert data into roles table
-    client.query(`INSERT INTO roles (title) VALUES ($1)`, [roleTitle]);
+// Add a department
+async function addDepartmentToDatabase(departmentName) {
+  const query = `INSERT INTO departments (name) VALUES ('${departmentName}')`;
+  await executeQuery(query);
+}
 
-    // Add more queries to insert data into other tables
+// Add a role
+async function addRoleToDatabase(roleName, salary, departmentId) {
+  const query = `INSERT INTO roles (title, salary, department_id) VALUES ('${roleName}', ${salary}, ${departmentId})`;
+  await executeQuery(query);
+}
 
-    console.log('Data inserted successfully.');
-
-    client.end();
-  })
-  .catch(error => {
-    console.error('Error:', error);
-    client.end();
-  });
+// Add an employee
+async function addEmployeeToDatabase(firstName, lastName, roleId, managerId) {
+  const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${roleId}, ${managerId})`;
+  await executeQuery(query);
+}

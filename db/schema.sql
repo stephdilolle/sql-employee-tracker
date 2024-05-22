@@ -1,19 +1,18 @@
 DROP DATABASE IF EXISTS employee_db;
 CREATE DATABASE employee_db;
-
 \c employee_db;
 
 CREATE TABLE departments (
-  id INTEGER PRIMARY KEY,
-  department_name VARCHAR(30),
+    id INTEGER PRIMARY KEY,
+    department_name VARCHAR(30)
 );
 
 CREATE TABLE roles (
- id INTEGER PRIMARY KEY
- title VARCHAR(30),
- salary DECIMAL,
- department_id INT,
- FOREIGN KEY (department_id) REFERENCES departments(id)
+    id INTEGER PRIMARY KEY,
+    title VARCHAR(30),
+    salary DECIMAL,
+    department_id INT,
+    FOREIGN KEY (department_id) REFERENCES departments(id)
 );
 
 CREATE TABLE employees (
