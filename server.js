@@ -1,88 +1,73 @@
-const inquirer = require('inquirer');
 const { Client } = require('pg');
+const inquirer = require('inquirer');
 
 const client = new Client({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'employee_db',
-  password: 'sDi1995',
-  port: 5432,
+    user: 'postgres',
+    host: 'localhost',
+    database: 'employee_db',
+    password: 'sDi1995',
+    port: 5432,
 });
 
 client.connect();
 
-// Prompt for adding a department
-function addDepartmentPrompt() {
-  return inquirer.prompt([
-      {
-          type: 'input',
-          name: 'departmentName',
-          message: 'Enter the name of the department:'
-      }
-  ]);
+// Main menu options
+const mainMenuOptions = [
+    'View all departments',
+    'View all roles',
+    'View all employees',
+    'Add a department',
+    'Add a role',
+    'Add an employee',
+    'Update an employee role'
+];
+
+// Function to view all departments
+async function viewAllDepartments() {
+    const query = 'SELECT * FROM departments';
+    const result = await client.query(query);
+    console.table(result.rows);
 }
 
-// Prompt for adding a role
-function addRolePrompt() {
-  return inquirer.prompt([
-      {
-          type: 'input',
-          name: 'roleName',
-          message: 'Enter the name of the role:'
-      },
-      {
-          type: 'input',
-          name: 'salary',
-          message: 'Enter the salary for this role:'
-      },
-      {
-          type: 'input',
-          name: 'departmentId',
-          message: 'Enter the department ID for this role:'
-      }
-  ]);
+// Function to view all roles
+async function viewAllRoles() {
+    const query = 'SELECT * FROM roles';
+    const result = await client.query(query);
+    console.table(result.rows);
 }
 
-// Prompt for adding an employee
-function addEmployeePrompt() {
-  return inquirer.prompt([
-      {
-          type: 'input',
-          name: 'firstName',
-          message: 'Enter the first name of the employee:'
-      },
-      {
-          type: 'input',
-          name: 'lastName',
-          message: 'Enter the last name of the employee:'
-      },
-      {
-          type: 'input',
-          name: 'roleId',
-          message: 'Enter the role ID for this employee:'
-      },
-      {
-          type: 'input',
-          name: 'managerId',
-          message: 'Enter the manager ID for this employee:'
-      }
-  ]);
+// Function to view all employees
+async function viewAllEmployees() {
+    const query = 'SELECT * FROM employees';
+    const result = await client.query(query);
+    console.table(result.rows);
 }
 
-// Add a department
-async function addDepartmentToDatabase(departmentName) {
-  const query = `INSERT INTO departments (name) VALUES ('${departmentName}')`;
-  await executeQuery(query);
+// Main function to start the application
+async function startApp() {
+    const { choice } = await inquirer.prompt({
+        type: 'list',
+        name: 'choice',
+        message: 'Select an option:',
+        choices: mainMenuOptions
+    });
+
+    switch (choice) {
+        case 'View all departments':
+            await viewAllDepartments();
+            break;
+        case 'View all roles':
+            await viewAllRoles();
+            break;
+        case 'View all employees':
+            await viewAllEmployees();
+            break;
+        // Add cases for other options
+        default:
+            console.log('Invalid choice');
+    }
+
+    client.end(); // Close the database connection
 }
 
-// Add a role
-async function addRoleToDatabase(roleName, salary, departmentId) {
-  const query = `INSERT INTO roles (title, salary, department_id) VALUES ('${roleName}', ${salary}, ${departmentId})`;
-  await executeQuery(query);
-}
-
-// Add an employee
-async function addEmployeeToDatabase(firstName, lastName, roleId, managerId) {
-  const query = `INSERT INTO employees (first_name, last_name, role_id, manager_id) VALUES ('${firstName}', '${lastName}', ${roleId}, ${managerId})`;
-  await executeQuery(query);
-}
+startApp(); // Start the application
