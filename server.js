@@ -62,7 +62,7 @@ async function addDepartment() {
   try {
       const result = await client.query(query, values);
       console.log('Department added successfully!');
-      console.log(result.rows[0]); // Optional: Print the added department details
+      console.log(result.rows[0]);
   } catch (error) {
       console.error('Error adding department:', error);
   }
@@ -89,7 +89,7 @@ async function addRole() {
   ]);
 
   const query = 'INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3) RETURNING *';
-  const values = [answers.role_title, answers.salary, answers.department_id];
+  const values = [answers.title, answers.salary, answers.department_id];
 
   console.log('Executing SQL query:', query);
   console.log('Query values:', values);
@@ -97,7 +97,7 @@ async function addRole() {
   try {
     const result = await client.query(query, values);
     console.log('Role added successfully!');
-    console.log(result.rows[0]); // Optional: Print the added role details
+    console.log(result.rows[0]);
   } catch (error) {
     console.error('Error adding role:', error);
   }
@@ -137,7 +137,7 @@ async function addEmployee() {
   try {
     const result = await client.query(query, values);
     console.log('Employee added successfully!');
-    console.log(result.rows[0]); // Optional: Print the added employee details
+    console.log(result.rows[0]);
   } catch (error) {
     console.error('Error adding employee:', error);
   }
@@ -171,7 +171,7 @@ async function updateEmployee() {
   try {
       const result = await client.query(query, values);
       console.log('Employee updated successfully!');
-      console.log(result.rows[0]); // Optional: Print the updated employee details
+      console.log(result.rows[0]);
   } catch (error) {
       console.error('Error updating employee:', error);
   }
@@ -208,7 +208,6 @@ async function startApp() {
         case 'Update an employee role':
             await updateEmployee();
             break;
-        // Add cases for other options
         default:
             console.log('Invalid choice');
     }
