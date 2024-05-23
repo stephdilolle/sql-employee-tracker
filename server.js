@@ -73,7 +73,7 @@ async function addRole() {
   const answers = await inquirer.prompt([
     {
       type: 'input',
-      name: 'role_title',
+      name: 'title',
       message: 'Enter the role title:'
     },
     {
@@ -88,7 +88,7 @@ async function addRole() {
     }
   ]);
 
-  const query = 'INSERT INTO roles (role_title, salary, department_id) VALUES ($1, $2, $3) RETURNING *';
+  const query = 'INSERT INTO roles (title, salary, department_id) VALUES ($1, $2, $3) RETURNING *';
   const values = [answers.role_title, answers.salary, answers.department_id];
 
   console.log('Executing SQL query:', query);
