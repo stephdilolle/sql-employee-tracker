@@ -39,7 +39,7 @@ Provide instructions and examples for use. Include screenshots as needed.
 3. Run \i seeds.sql to add initial data to the employee database tables.
 4. Open server.js in a new terminal and run npm install inquirer@8.2.4
 5. Run node server.js to initiate the prompt.
-- Video walkthrough: (https://www.loom.com/share/b4ffa969effb4c688c858260d58739ce?sid=37d4ee4a-d786-4383-ba18-5c9bf5c3b2d8)
+- Video walkthrough: https://www.loom.com/share/b4ffa969effb4c688c858260d58739ce?sid=37d4ee4a-d786-4383-ba18-5c9bf5c3b2d8
 
 ## License
 
