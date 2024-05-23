@@ -43,6 +43,53 @@ async function viewAllEmployees() {
     console.table(result.rows);
 }
 
+// Function to add a department
+async function addDepartment() {
+  const answers = await inquirer.prompt([
+      {
+          type: 'input',
+          name: 'department_name',
+          message: 'Enter the department name:'
+      }
+  ]);
+
+  const query = 'INSERT INTO departments (department_name) VALUES ($1) RETURNING *';
+  const values = [answers.department_name];
+
+  console.log('Executing SQL query:', query);
+  console.log('Query values:', values);
+
+  try {
+      const result = await client.query(query, values);
+      console.log('Department added successfully!');
+      console.log(result.rows[0]); // Optional: Print the added department details
+  } catch (error) {
+      console.error('Error adding department:', error);
+  }
+}
+
+// Function to add an employee
+async function addEmployee() {
+    const answers = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'Enter the employee\'s first name:'
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'Enter the employee\'s last name:'
+        },
+        
+
+    ]);
+
+    const query = 'INSERT INTO employees (first_name, last_name) VALUES ($1, $2)';
+    await client.query(query, [answers.first_name, answers.last_name]);
+    console.log('Employee added successfully!');
+}
+
 // Main function to start the application
 async function startApp() {
     const { choice } = await inquirer.prompt({
@@ -61,6 +108,12 @@ async function startApp() {
             break;
         case 'View all employees':
             await viewAllEmployees();
+            break;
+        case 'Add a department':
+            await addDepartment();
+            break;
+        case 'Add an employee':
+            await addEmployee();
             break;
         // Add cases for other options
         default:
